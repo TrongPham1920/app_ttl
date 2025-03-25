@@ -4,6 +4,7 @@ import React, {
   useState,
   useCallback,
   useEffect,
+  useRef,
 } from "react";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
@@ -16,8 +17,9 @@ export const AuthProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [banks, setBanks] = useState([]);
+  const [wsMessages, setWsMessages] = useState([]);
+  const socketRef = useRef(null);
 
-  // Hàm lấy danh sách ngân hàng
   const fetchBanks = async () => {
     try {
       const response = await sabank();
@@ -28,7 +30,45 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Đăng xuất
+  const connectSocket = () => {
+    const isLocal = __DEV__;
+    const wsUrl = isLocal
+      ? "ws://localhost:8083/ws"
+      : "wss://backend.trothalo.click/ws";
+
+    const ws = new WebSocket(wsUrl);
+
+    ws.onopen = () => {
+      console.log("WebSocket connected");
+      if (profile) {
+        ws.send(JSON.stringify({ type: "connection", user: profile?.user_info }));
+      }
+    };
+
+    ws.onmessage = (event) => {
+      console.log("WebSocket received:", event.data);
+      setWsMessages((prev) => [...prev, event.data]);
+    };
+
+    ws.onclose = () => {
+      console.log("WebSocket disconnected");
+    };
+
+    ws.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
+    socketRef.current = ws;
+  };
+
+  const disconnectSocket = () => {
+    if (socketRef.current) {
+      socketRef.current.close();
+      socketRef.current = null;
+      console.log("WebSocket disconnected");
+    }
+  };
+
   const onLogout = useCallback(async () => {
     try {
       await logout();
@@ -37,18 +77,21 @@ export const AuthProvider = ({ children }) => {
 
       setProfile(null);
       router.push("/");
+
+      disconnectSocket();
     } catch (error) {
       console.error("Error during logout:", error);
     }
   }, [router]);
 
-  // Đăng nhập
   const onLogin = (data) => {
     SecureStore.setItemAsync("profile", JSON.stringify(data?.user_info));
     SecureStore.setItemAsync("accessToken", JSON.stringify(data?.accessToken));
 
     setProfile(data?.user_info);
     router.push("/");
+
+    connectSocket();
   };
 
   const updateProfile = async (newProfileData) => {
@@ -61,7 +104,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -69,7 +111,7 @@ export const AuthProvider = ({ children }) => {
         if (profileData) {
           setProfile(JSON.parse(profileData));
         }
-        await fetchBanks(); 
+        await fetchBanks();
       } catch (error) {
         console.error("Error loading data:", error);
       } finally {
@@ -78,9 +120,21 @@ export const AuthProvider = ({ children }) => {
     };
 
     loadData();
-  }, []); 
+
+    return () => {
+      disconnectSocket();
+    };
+  }, []);
 
   const isAuthenticated = () => !!profile;
+
+  const sendMessage = (msg) => {
+    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+      socketRef.current.send(msg);
+    } else {
+      console.error("WebSocket is not connected.");
+    }
+  };
 
   return (
     <AuthContext.Provider
@@ -92,6 +146,8 @@ export const AuthProvider = ({ children }) => {
         profile,
         updateProfile,
         banks,
+        wsMessages,
+        sendMessage,
       }}
     >
       {children}

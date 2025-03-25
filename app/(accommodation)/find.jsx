@@ -27,6 +27,8 @@ const FindScreen = () => {
     onOK,
     handleSearch,
     handleEndReached,
+    selectedFilters,
+    handleRemoveTag
   } = useFindModal(); 
 
   const dates = { fromDate, toDate };
@@ -51,6 +53,17 @@ const FindScreen = () => {
         <TouchableOpacity style={styles.filterButton} onPress={toggleModal}>
           <FontAwesome5 name="sliders-h" size={24} color="black" />
         </TouchableOpacity>
+      </View>
+
+      <View style={styles.tagContainer}>
+        {selectedFilters.map((filter, index) => (
+          <View key={index} style={styles.tag}>
+            <Text style={styles.tagText}>{filter}</Text>
+            <TouchableOpacity onPress={() => handleRemoveTag(filter)}>
+              <FontAwesome5 name="times" size={16} color="white" />
+            </TouchableOpacity>
+          </View>
+        ))}
       </View>
 
       <CustomList
@@ -121,6 +134,26 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 10,
   },
+  tagContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 10,
+  },
+  tag: {
+    flexDirection: "row",
+    backgroundColor: "#007BFF",
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    marginRight: 5,
+    marginBottom: 5,
+    alignItems: "center",
+  },
+  tagText: {
+    color: "white",
+    marginRight: 5,
+  },
+  
 });
 
 export default FindScreen;
