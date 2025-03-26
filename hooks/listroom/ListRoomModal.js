@@ -30,13 +30,6 @@ const useHotModal = () => {
     limit: pageSize,
   });
 
-  const handleRoomPress = (roomId) => {
-    router.push({
-      pathname: "/roomdetail",
-      params: { roomId },
-    });
-  };
-
   const handleCheckboxChange = (roomId, price) => {
     setSelectedRooms((prev) => {
       const existingRoom = prev.find((room) => room.id === roomId);
@@ -152,7 +145,6 @@ const useHotModal = () => {
     handleBookNow,
     calculateTotalPrice,
     handleCheckboxChange,
-    handleRoomPress,
     handleCloseDateModal,
     handleOpenDateModal,
     handleDateSelection,

@@ -51,7 +51,6 @@ const ListRoomView = () => {
     handleBookNow,
     calculateTotalPrice,
     handleCheckboxChange,
-    handleRoomPress,
     handleCloseDateModal,
     handleOpenDateModal,
     handleDateSelection,
@@ -161,10 +160,6 @@ const ListRoomView = () => {
         keyExtractor={(item) => item?.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.roomCard}>
-            <TouchableOpacity
-              style={styles.roomCardTouchable}
-              onPress={() => handleRoomPress(item.id)}
-            >
               <View style={styles.header}>
                 <View style={styles.roomInfoHeader}>
                   <Text style={styles.roomName}>{item?.roomName}</Text>
@@ -211,7 +206,6 @@ const ListRoomView = () => {
                   {FormatUtils.vndPrice(item?.price)}
                 </Text>
               </View>
-            </TouchableOpacity>
           </View>
         )}
       />

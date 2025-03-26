@@ -18,9 +18,6 @@ const GuestModal = ({
   guestPhone,
   setGuestPhone,
 }) => {
-
-  console.log("setGuestName:", setGuestName);  
-  console.log("guestName:", guestName);
   
   const handleConfirm = () => {
     if (!guestName || !guestPhone) {
