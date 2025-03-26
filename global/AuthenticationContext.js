@@ -31,10 +31,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const connectSocket = () => {
-    const isLocal = __DEV__;
-    const wsUrl = isLocal
-      ? "ws://localhost:8083/ws"
-      : "wss://backend.trothalo.click/ws";
+    
+    const wsUrl = "wss://backend.trothalo.click/ws";
 
     const ws = new WebSocket(wsUrl);
 
