@@ -45,7 +45,7 @@ const Stars = ({ num }) => {
 };
 
 const DetailView = () => {
-    const { id, date } = useLocalSearchParams(); 
+  const { id, date } = useLocalSearchParams();
   const {
     loading,
     detailData,
@@ -253,6 +253,7 @@ const styles = StyleSheet.create({
   scrollcontainer: {
     backgroundColor: "#fff",
     paddingHorizontal: 20,
+    paddingTop: 10,
   },
   header: {
     flexDirection: "row",
