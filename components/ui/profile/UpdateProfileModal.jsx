@@ -23,6 +23,7 @@ const UpdateProfileModal = ({ visible, onClose, avatarUrl }) => {
     setValue,
     formState: { errors },
   } = useForm();
+  const [showPicker, setShowPicker] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(() => {
     if (profile?.dateOfBirth) {
@@ -80,36 +81,73 @@ const UpdateProfileModal = ({ visible, onClose, avatarUrl }) => {
             <Text style={styles.errorText}>{errors.fullName.message}</Text>
           )}
 
-          <Text style={styles.label}>Giới tính</Text>
-          <Controller
-            control={control}
-            name="gender"
-            rules={{ required: "Giới tính là bắt buộc" }}
-            defaultValue={profile?.gender}
-            render={({ field: { onChange, value } }) => (
-              <View
-                style={[
-                  styles.inputContainer,
-                  errors.gender && styles.inputError,
-                  { paddingLeft: 0 },
-                ]}
-              >
-                <Picker
-                  selectedValue={value}
-                  style={styles.picker}
-                  onValueChange={onChange}
-                >
-                  <Picker.Item label="Chọn giới tính" value={null} />
-                  <Picker.Item label="Nam" value={0} />
-                  <Picker.Item label="Nữ" value={1} />
-                  <Picker.Item label="Khác" value={2} />
-                </Picker>
-              </View>
-            )}
-          />
-          {errors.gender && (
-            <Text style={styles.errorText}>{errors.gender.message}</Text>
-          )}
+            <Text style={styles.label}>Giới tính</Text>
+            <Controller
+              control={control}
+              name="gender"
+              rules={{ required: "Giới tính là bắt buộc" }}
+              defaultValue={profile?.gender}
+              render={({ field: { onChange, value } }) => {
+                const genderValue = parseInt(value, 10);
+
+                return (
+                  <View
+                    style={[
+                      styles.inputContainer,
+                      errors.gender && styles.inputError,
+                    ]}
+                  >
+                    <TouchableOpacity
+                      onPress={() => setShowPicker(!showPicker)}
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        width: '100%',
+                        paddingHorizontal: 10,
+                      }}
+                    >
+                      <Text style={{ flex: 1 }}>
+                        {isNaN(genderValue) || genderValue === null
+                          ? "Chọn giới tính"
+                          : genderValue === 0
+                          ? "Nam"
+                          : genderValue === 1
+                          ? "Nữ"
+                          : genderValue === 2
+                          ? "Khác"
+                          : "Chọn giới tính"}
+                      </Text>
+                      <Icon
+                        name="caret-down"
+                        size={20}
+                        color="black"
+                        style={{ marginLeft: 10 }}  
+                      />
+                    </TouchableOpacity>
+
+                    
+                    {showPicker && (
+                      <View style={{ marginTop: 10, position: 'absolute', width: '100%', zIndex: 20 }}>
+                        <Picker
+                          selectedValue={value}
+                          style={[styles.picker, { backgroundColor: '#fff' }]}
+                          onValueChange={(itemValue) => {
+                            setShowPicker(false); 
+                            onChange(itemValue);  
+                          }}
+                        >
+                          <Picker.Item label="Chọn giới tính" value={null} />
+                          <Picker.Item label="Nam" value={0} />
+                          <Picker.Item label="Nữ" value={1} />
+                          <Picker.Item label="Khác" value={2} />
+                        </Picker>
+                      </View>
+                    )}
+                  </View>
+                );
+              }}
+            />
+            {errors.gender && <Text style={styles.errorText}>{errors.gender.message}</Text>}
 
           <Text style={styles.label}>Ngày sinh</Text>
           <Controller
@@ -166,28 +204,15 @@ const UpdateProfileModal = ({ visible, onClose, avatarUrl }) => {
           <Controller
             control={control}
             name="phoneNumber"
-            rules={{
-              required: "Số điện thoại là bắt buộc",
-              pattern: {
-                value: /^[0-9]{10,11}$/,
-                message: "Số điện thoại không hợp lệ",
-              },
-            }}
             defaultValue={profile?.phone || ""}
-            render={({ field: { onChange, value } }) => (
-              <TextInput
-                style={[styles.input, errors.phoneNumber && styles.inputError]}
-                placeholder="Nhập số điện thoại"
-                keyboardType="numeric"
-                value={value}
-                onChangeText={onChange}
-              />
+            render={({ field: { value } }) => (
+              <View style={[styles.inputContainer]}>
+                <Text style={{ flex: 1, paddingHorizontal: 10, lineHeight: 50 }}>
+                  {value}
+                </Text>
+              </View>
             )}
           />
-          {errors.phoneNumber && (
-            <Text style={styles.errorText}>{errors.phoneNumber.message}</Text>
-          )}
-
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.modalButtonConfirm}
@@ -202,7 +227,7 @@ const UpdateProfileModal = ({ visible, onClose, avatarUrl }) => {
                 onClose();
               }}
             >
-              <Text style={[styles.modalButtonText, { color: "black" }]}>
+              <Text style={[styles.modalButtonText, { color: "black" }]} >
                 Đóng
               </Text>
             </TouchableOpacity>

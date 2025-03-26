@@ -181,8 +181,11 @@ const useProfile = () => {
     }
   };
   const handleUpdateProfile = async (values) => {
+    values.gender = parseInt(values.gender, 10);
+    console.log("va",values)
     try {
       const response = await updateuser(values);
+      console.log("res",response)
       if (response.code === 1) {
         updateProfile(response.data)
         Toast.show({
