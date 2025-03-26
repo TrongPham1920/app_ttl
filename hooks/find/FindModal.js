@@ -9,6 +9,8 @@ const FindModal = () => {
   const [inputValue, setInputValue] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [selectedFilters, setSelectedFilters] = useState([]);
+
 
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(20);
@@ -93,6 +95,36 @@ const FindModal = () => {
 
   const onOK = (info) => {
     setLoading(true);
+  
+    const filtersArray = [...selectedFilters]; 
+  
+    const typeMapping = {
+      0: "Hotel",
+      1: "Homestay",
+      2: "Villa"
+    };
+  
+    if (info?.type !== undefined && typeMapping[info.type]) {
+      const typeValues = Object.values(typeMapping);
+      const filtered = filtersArray.filter(item => !typeValues.includes(item));
+      filtered.push(typeMapping[info.type]);
+      filtersArray.splice(0, filtersArray.length, ...filtered);
+    }
+  
+    if (info?.num !== undefined) {
+      const filtered = filtersArray.filter(item => !item.includes("sao"));
+      filtered.push(`${info.num} sao`);
+      filtersArray.splice(0, filtersArray.length, ...filtered);
+    }
+  
+    if (info?.district) {
+      const filtered = filtersArray.filter(item => !item.includes("Quận"));
+      filtered.push(`Quận ${info.district}`);
+      filtersArray.splice(0, filtersArray.length, ...filtered);
+    }
+  
+    setSelectedFilters(filtersArray);
+  
     const updatedParams = {
       ...filterParams,
       page: 0,
@@ -100,10 +132,33 @@ const FindModal = () => {
       fromDate: fromDate,
       toDate: toDate,
     };
-
+  
     setFilterParams(updatedParams);
     fetchData(updatedParams, false);
   };
+  
+  
+
+  const handleRemoveTag = (filter) => {
+    const updatedFilters = selectedFilters.filter((item) => item !== filter);
+    setSelectedFilters(updatedFilters);
+  
+    const updatedParams = { ...filterParams };
+  
+    if (filter.includes("sao")) {
+      delete updatedParams.num;
+    } else if (filter.includes("Hotel") || filter.includes("Homestay") || filter.includes("Villa")) {
+      delete updatedParams.type;
+    } else if (filter.includes("Quận")) {
+      delete updatedParams.district;
+    }
+  
+    setFilterParams(updatedParams);
+    fetchData(updatedParams, false);
+  };
+  
+  
+  
 
   const handleEndReached = () => {
     if (loading || !hasMore) {
@@ -138,6 +193,8 @@ const FindModal = () => {
     onOK,
     handleSearch,
     handleEndReached,
+    selectedFilters,
+    handleRemoveTag
   };
 };
 

@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import {
   View,
   StyleSheet,
-  TouchableOpacity,
-  Image,
-  Modal,
   Text,
+  Modal,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Image,
 } from "react-native";
-import LocationMap from "./LocationMap";
+import LocationMap from "./LocationMap"; 
 
 const LocationMapWithThumbnail = ({ latitude, longitude }) => {
   const [showFullMap, setShowFullMap] = useState(false);
@@ -16,41 +17,51 @@ const LocationMapWithThumbnail = ({ latitude, longitude }) => {
     setShowFullMap(!showFullMap);
   };
 
+  const closeModal = () => {
+    setShowFullMap(false);
+  };
+
   return (
     <View style={styles.container}>
-      {!showFullMap ? (
-        <TouchableOpacity onPress={toggleMap}>
-          <Image
-            source={{
-              uri: "https://res.cloudinary.com/dqipg0or3/image/upload/v1733261088/avatars/vponkkjvkgwq2byu5ehi.png",
-            }}
-            style={styles.thumbnail}
-          />
-        </TouchableOpacity>
-      ) : (
-        <Modal
-          visible={showFullMap}
-          animationType="slide"
-          transparent={true}
-          onRequestClose={toggleMap}
-        >
+      
+      <TouchableOpacity onPress={toggleMap}>
+        <Text style={styles.viewLocationText}>Xem bản đồ</Text>
+      </TouchableOpacity>
+
+      
+      <Modal
+        visible={showFullMap}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={closeModal}
+      >
+        <TouchableWithoutFeedback onPress={closeModal}>
           <View style={styles.modalBackground}>
-            <View style={styles.modalContent}>
-              {/* Nút đóng X */}
-              <TouchableOpacity style={styles.closeButton} onPress={toggleMap}>
-                <Image
-                  source={{
-                    uri: "https://res.cloudinary.com/dqipg0or3/image/upload/v1733262958/avatars/vjlghbuynuhtinnr6jxl.png",
-                  }}
-                  style={styles.closeIcon}
-                />
-              </TouchableOpacity>
-              {/* Bản đồ */}
-              <LocationMap latitude={latitude} longitude={longitude} />
-            </View>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContent}>
+                {/* Close button */}
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={closeModal}
+                >
+                  <Image
+                    source={{
+                      uri: "https://res.cloudinary.com/dqipg0or3/image/upload/v1742460482/avatars/ypfytx9gwjqvxgygi3jf.png",
+                    }}
+                    style={styles.closeIcon}
+                  />
+                </TouchableOpacity>
+                {/* Location map */}
+                {latitude && longitude ? (
+                  <LocationMap latitude={latitude} longitude={longitude} />
+                ) : (
+                  <Text style={styles.noLocationText}>Vị trí không có sẵn</Text>
+                )}
+              </View>
+            </TouchableWithoutFeedback>
           </View>
-        </Modal>
-      )}
+        </TouchableWithoutFeedback>
+      </Modal>
     </View>
   );
 };
@@ -61,10 +72,10 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "flex-start",
   },
-  thumbnail: {
-    width: 40,
-    height: 40,
-    borderRadius: 10,
+  viewLocationText: {
+    fontSize: 14,
+    color: "#cdcbcb",
+    fontStyle: "italic",
   },
   modalBackground: {
     position: "absolute",
@@ -82,20 +93,26 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 10,
     position: "relative",
+    padding: 10,
   },
   closeButton: {
     position: "absolute",
-    top: 2,
-    right: 2,
+    top: 10,
+    right: 10,
     backgroundColor: "white",
     borderRadius: 50,
-
     zIndex: 10,
   },
   closeIcon: {
     width: 30,
     height: 30,
     resizeMode: "contain",
+  },
+  noLocationText: {
+    textAlign: "center",
+    fontSize: 18,
+    color: "#999",
+    marginTop: 20,
   },
 });
 
