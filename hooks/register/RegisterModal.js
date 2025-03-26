@@ -27,7 +27,9 @@ const useRegister = (reset) => {
 
       if (response.code === 1) {
         reset();
-        router.push("/screen/login");
+        router.push({
+          pathname: "/(auth)/login",
+        });
         Toast.show({
           type: "success",
           position: "top",
