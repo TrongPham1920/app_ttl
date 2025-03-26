@@ -2,21 +2,21 @@ import React, { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 import AccommodationCard from "../card/AccommodationCard";
 import Loading from "../loading/Loading";
-import { useRouter } from "expo-router"; 
+import { useRouter } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 
 const CustomList = ({ data, loading, onEndReached, date, hasMore }) => {
-  const router = useRouter(); 
+  const router = useRouter();
 
   const renderItem = ({ item }) => (
     <AccommodationCard
       accommodation={item}
-      onPress={() => 
+      onPress={() =>
         router.push({
           pathname: "/detail",
           params: { id: item.id, date: date },
         })
-      } 
+      }
     />
   );
 
@@ -24,7 +24,7 @@ const CustomList = ({ data, loading, onEndReached, date, hasMore }) => {
 
   const handleEndReached = useCallback(() => {
     if (!loading && hasMore) {
-      onEndReached(); 
+      onEndReached();
     }
   }, [loading, hasMore, onEndReached]);
 
@@ -36,11 +36,10 @@ const CustomList = ({ data, loading, onEndReached, date, hasMore }) => {
         data={data}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
-        contentContainerStyle={styles.listContent}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         ListFooterComponent={loading && <Loading />}
-        onEndReached={handleEndReached} 
-        onEndReachedThreshold={0.9} 
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.9}
         estimatedItemSize={200}
       />
     </View>
@@ -52,9 +51,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 0,
   },
-  listContent: {
-    paddingBottom: 30,
-  },
+
   footer: {
     height: 35,
   },

@@ -15,14 +15,14 @@ import Loading from "../../components/ui/foundation/loading/Loading";
 import useOrderDetailModal from "../../hooks/detailorder/DetailOrderModal";
 
 const DetailOrder = () => {
-  const { id } = useLocalSearchParams(); 
+  const { id } = useLocalSearchParams();
   const { detail, loading, onOk } = useOrderDetailModal({ id });
 
   const [isModalVisible, setModalVisible] = useState(false);
 
   const handleCancelOrder = () => {
-    setModalVisible(false); 
-    onOk(); 
+    setModalVisible(false);
+    onOk();
   };
 
   if (loading) {
@@ -142,7 +142,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingTop: 5,
     paddingHorizontal: 5,
-    paddingBottom: 60,
   },
   section: {
     marginBottom: 5,

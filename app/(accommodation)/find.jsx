@@ -9,11 +9,10 @@ import {
   View,
 } from "react-native";
 import CustomList from "../../components/ui/foundation/list/CustomList";
-import useFindModal from "../../hooks/find/FindModal"; 
+import useFindModal from "../../hooks/find/FindModal";
 import FilterModal from "../../components/ui/find/FilterModal";
 
 const FindScreen = () => {
-    
   const {
     accommodationData,
     hasMore,
@@ -28,8 +27,8 @@ const FindScreen = () => {
     handleSearch,
     handleEndReached,
     selectedFilters,
-    handleRemoveTag
-  } = useFindModal(); 
+    handleRemoveTag,
+  } = useFindModal();
 
   const dates = { fromDate, toDate };
 
@@ -94,7 +93,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     backgroundColor: "white",
-    paddingBottom: 30,
   },
   searchRow: {
     flexDirection: "row",
@@ -153,7 +151,6 @@ const styles = StyleSheet.create({
     color: "white",
     marginRight: 5,
   },
-  
 });
 
 export default FindScreen;

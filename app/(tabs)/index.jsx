@@ -214,7 +214,7 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "white", padding: 5 },
-  listContent: { paddingBottom: 35 },
+  listContent: {},
   boxHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
