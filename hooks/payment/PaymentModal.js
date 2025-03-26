@@ -25,9 +25,10 @@ const usePaymentModal = ({ params }) => {
 
   const parsedUser = user ? JSON.parse(user) : null;
   const parsedSelectedKey = selectedKey ? JSON.parse(selectedKey) : [];
-  const { bankShortName, accountNumber } = parsedUser.bankShortName && parsedUser.accountNumber
-  ? parsedUser
-  : parsedUser.banks?.[0] ?? {};
+  const { bankShortName, accountNumber } =
+    parsedUser.bankShortName && parsedUser.accountNumber
+      ? parsedUser
+      : parsedUser.banks?.[0] ?? {};
 
   useEffect(() => {
     if (user) {
@@ -91,7 +92,7 @@ const usePaymentModal = ({ params }) => {
         });
         setGuestPhone("");
         setGuestName("");
-        router.replace("/")
+        router.replace("/");
       } else {
         Toast.show({
           type: "error",
@@ -114,7 +115,11 @@ const usePaymentModal = ({ params }) => {
   };
 
   const handleCancel = () => {
-    router.replace("/")
+    const id = hotelId;
+    router.push({
+      pathname: "/detail",
+      params: { id: id, resetDates: "true" },
+    });
   };
 
   const downloadImageToGallery = async (url, fileName) => {

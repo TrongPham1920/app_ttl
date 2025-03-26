@@ -1,17 +1,42 @@
 import { Tabs } from "expo-router";
-import { AntDesign, FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  FontAwesome,
+  Ionicons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import Header from "../../components/ui/layout/Header";
 
 export default function Layout() {
   return (
-    <Tabs screenOptions={{ headerShown: true, header: ()=><Header/> }}>
+    <Tabs
+      screenOptions={{
+        headerShown: true,
+        header: () => <Header />,
+        headerStyle: {
+          backgroundColor: "#fff",
+          elevation: 0,
+          shadowOpacity: 0,
+        },
+        headerTransparent: false,
+      }}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: "Trang chủ",
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name="home" size={size} color={color} />
+          ),
+        }}
+      />
 
       <Tabs.Screen
         name="hot"
         options={{
           title: "Hot",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="flame" size={size} color={color} /> 
+            <Ionicons name="flame" size={size} color={color} />
           ),
         }}
       />
@@ -26,27 +51,17 @@ export default function Layout() {
           ),
         }}
       />
-   
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: "Home",
-          tabBarIcon: ({ color, size }) => (
-            <AntDesign name="home" size={size} color={color} />
-          ),
-        }}
-      />
 
       <Tabs.Screen
         name="order"
         options={{
-          title: "Đơn đặt", 
+          title: "Đơn đặt",
           tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="hotel" size={size} color={color} /> 
+            <MaterialIcons name="hotel" size={size} color={color} />
           ),
         }}
       />
-    
+
       <Tabs.Screen
         name="profile"
         options={{

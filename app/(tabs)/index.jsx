@@ -47,7 +47,11 @@ const HomeScreen = () => {
             onPress={() => {
               router.push({
                 pathname: "/find",
-                params: { type: 0, fromDate: dates.fromDate, toDate: dates.toDate },
+                params: {
+                  type: 0,
+                  fromDate: dates.fromDate,
+                  toDate: dates.toDate,
+                },
               });
             }}
           >
@@ -65,7 +69,11 @@ const HomeScreen = () => {
             onPress={() => {
               router.push({
                 pathname: "/find",
-                params: { type: 2, fromDate: dates.fromDate, toDate: dates.toDate },
+                params: {
+                  type: 2,
+                  fromDate: dates.fromDate,
+                  toDate: dates.toDate,
+                },
               });
             }}
           >
@@ -83,7 +91,11 @@ const HomeScreen = () => {
             onPress={() => {
               router.push({
                 pathname: "/find",
-                params: { type: 1, fromDate: dates.fromDate, toDate: dates.toDate },
+                params: {
+                  type: 1,
+                  fromDate: dates.fromDate,
+                  toDate: dates.toDate,
+                },
               });
             }}
           >
@@ -97,17 +109,41 @@ const HomeScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.headerTextContainer}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            padding: 8,
+          }}
+        >
           <EvilIcons name="location" size={24} color="#1E90FF" />
-          <Text style={styles.headerText}>Địa điểm nổi tiếng</Text>
+          <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 5 }}>
+            Địa điểm nổi tiếng
+          </Text>
         </View>
 
         <View style={styles.boxRow}>
           {[
-            { province: "Hồ Chí Minh", image: "https://wallpapers.com/images/featured/ho-chi-minh-city-souznxe6xnmwb70j.jpg" },
-            { province: "Đà Nẵng", image: "https://res.cloudinary.com/dqipg0or3/image/upload/v1736306105/avatars/fn38tjh8gqoyksfivpa2.jpg" },
-            { province: "Đà Lạt", image: "https://haycafe.vn/wp-content/uploads/2022/01/Hinh-anh-Da-Lat-o-quang-truong.jpg" },
-            { province: "Vũng Tàu", image: "https://c1.wallpaperflare.com/preview/868/808/843/vung-tau-panorama-scenery-the-sea.jpg" },
+            {
+              province: "Hồ Chí Minh",
+              image:
+                "https://wallpapers.com/images/featured/ho-chi-minh-city-souznxe6xnmwb70j.jpg",
+            },
+            {
+              province: "Đà Nẵng",
+              image:
+                "https://res.cloudinary.com/dqipg0or3/image/upload/v1736306105/avatars/fn38tjh8gqoyksfivpa2.jpg",
+            },
+            {
+              province: "Đà Lạt",
+              image:
+                "https://haycafe.vn/wp-content/uploads/2022/01/Hinh-anh-Da-Lat-o-quang-truong.jpg",
+            },
+            {
+              province: "Vũng Tàu",
+              image:
+                "https://c1.wallpaperflare.com/preview/868/808/843/vung-tau-panorama-scenery-the-sea.jpg",
+            },
           ].map((item, index) => (
             <TouchableOpacity
               key={index}
@@ -115,7 +151,11 @@ const HomeScreen = () => {
               onPress={() => {
                 router.push({
                   pathname: "/find",
-                  params: { province: item.province, fromDate: dates.fromDate, toDate: dates.toDate },
+                  params: {
+                    province: item.province,
+                    fromDate: dates.fromDate,
+                    toDate: dates.toDate,
+                  },
                 });
               }}
             >
@@ -175,12 +215,46 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "white", padding: 5 },
   listContent: { paddingBottom: 35 },
-  boxHeader: { flexDirection: "row", justifyContent: "space-between", flexWrap: "wrap" },
-  box: { width: "32%", height: 150, backgroundColor: "lightgray", alignItems: "center", justifyContent: "center", borderRadius: 10, overflow: "hidden" },
-  boxRow: { flexDirection: "row", justifyContent: "space-between", flexWrap: "wrap" },
-  box_img: { width: "49%", height: 150, backgroundColor: "lightgray", alignItems: "center", justifyContent: "center", borderRadius: 10, overflow: "hidden", marginBottom: 5 },
+  boxHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+  },
+  box: {
+    width: "32%",
+    height: 150,
+    backgroundColor: "lightgray",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  boxRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+  },
+  box_img: {
+    width: "49%",
+    height: 150,
+    backgroundColor: "lightgray",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    overflow: "hidden",
+    marginBottom: 5,
+  },
   image: { width: "100%", height: "100%", resizeMode: "cover" },
-  boxText: { position: "absolute", bottom: 0, width: "100%", textAlign: "center", fontSize: 16, fontWeight: "bold", color: "white", backgroundColor: "rgba(0, 0, 0, 0.24)" },
+  boxText: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "white",
+    backgroundColor: "rgba(0, 0, 0, 0.24)",
+  },
   listTitle: { fontSize: 18, fontWeight: "bold", marginLeft: 5 },
 });
 

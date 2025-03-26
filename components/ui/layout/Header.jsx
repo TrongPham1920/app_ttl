@@ -1,5 +1,11 @@
 import React from "react";
-import { View, StyleSheet, Image, StatusBar, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  StatusBar,
+  TouchableOpacity,
+} from "react-native";
 import { useRouter } from "expo-router";
 
 const Header = () => {
@@ -23,11 +29,16 @@ const Header = () => {
 const styles = StyleSheet.create({
   headerContainer: {
     backgroundColor: "white",
-    paddingVertical: 10,
+    paddingVertical: 5,
     paddingHorizontal: 20,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center", 
+    justifyContent: "center",
+    shadowColor: "#000", // Màu của bóng
+    shadowOffset: { width: 0, height: 2 }, // Độ lệch của bóng
+    shadowOpacity: 0.2, // Độ trong suốt của bóng
+    shadowRadius: 4, // Độ mờ của bóng
+    elevation: 4, // Bóng trên Android
   },
   headerImage: {
     width: 150,

@@ -21,7 +21,7 @@ const DetailModal = ({ id, date }) => {
 
   const userWithBanks = {
     ...detailData?.user,
-    banks, 
+    banks,
   };
 
   const fetchData = async (id) => {
@@ -46,6 +46,17 @@ const DetailModal = ({ id, date }) => {
     );
     fetchData(id);
   }, [id, date]);
+
+  const resetDates = () => {
+    setSelectedDate({ fromDate: null, toDate: null });
+    setShowDateModal(false);
+  };
+
+  useEffect(() => {
+    if (date?.resetDates === "true") {
+      resetDates();
+    }
+  }, [date]);
 
   const goToRoomList = () => {
     if (!selectedDate?.fromDate || !selectedDate?.toDate) {
