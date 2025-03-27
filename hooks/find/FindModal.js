@@ -26,6 +26,7 @@ const FindModal = () => {
   const params = useLocalSearchParams();
 
   const fetchData = async (filterParams, reset) => {
+    console.log("fil", filterParams)
     try {
       setLoading(true);
       const response = await accommodationuser(filterParams);
@@ -68,7 +69,7 @@ const FindModal = () => {
   const handleSearch = () => {
     const trimmedValue = inputValue.trim();
     setLoading(true);
-
+    console.log("trim",trimmedValue)
     if (trimmedValue) {
       const updatedParams = {
         limit: 20,
