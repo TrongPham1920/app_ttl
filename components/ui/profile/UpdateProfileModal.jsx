@@ -103,7 +103,7 @@ const UpdateProfileModal = ({ visible, onClose, avatarUrl }) => {
                         flexDirection: 'row',
                         alignItems: 'center',
                         width: '100%',
-                        paddingHorizontal: 10,
+                        paddingHorizontal: 5,
                       }}
                     >
                       <Text style={{ flex: 1 }}>
@@ -117,11 +117,11 @@ const UpdateProfileModal = ({ visible, onClose, avatarUrl }) => {
                           ? "Khác"
                           : "Chọn giới tính"}
                       </Text>
+                      
                       <Icon
                         name="caret-down"
                         size={20}
                         color="black"
-                        style={{ marginLeft: 10 }}  
                       />
                     </TouchableOpacity>
 
@@ -130,7 +130,7 @@ const UpdateProfileModal = ({ visible, onClose, avatarUrl }) => {
                       <View style={{ marginTop: 10, position: 'absolute', width: '100%', zIndex: 20 }}>
                         <Picker
                           selectedValue={value}
-                          style={[styles.picker, { backgroundColor: '#fff' }]}
+                          style={styles.picker}
                           onValueChange={(itemValue) => {
                             setShowPicker(false); 
                             onChange(itemValue);  
@@ -149,56 +149,63 @@ const UpdateProfileModal = ({ visible, onClose, avatarUrl }) => {
             />
             {errors.gender && <Text style={styles.errorText}>{errors.gender.message}</Text>}
 
-          <Text style={styles.label}>Ngày sinh</Text>
-          <Controller
-            control={control}
-            name="dateOfBirth"
-            rules={{ required: "Ngày sinh là bắt buộc" }}
-            defaultValue={profile?.dateOfBirth || ""}
-            render={({ field: { value } }) => (
-              <View
-                style={[
-                  styles.inputContainer,
-                  errors.dateOfBirth && styles.inputError,
-                ]}
-              >
-                <TextInput
-                  style={[
-                    {
-                      flex: 1,
-                      height: "100%",
+            <Text style={styles.label}>Ngày sinh</Text>
+            <Controller
+              control={control}
+              name="dateOfBirth"
+              rules={{ required: "Ngày sinh là bắt buộc" }}
+              defaultValue={profile?.dateOfBirth || ""}
+              render={({ field: { onChange, value } }) => (
+                <View
+                  style={[styles.inputContainer, errors.dateOfBirth && styles.inputError]}
+                >
+                
+                  <TouchableOpacity
+                    onPress={() => setShowDatePicker(true)}
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      width: '100%',
                       paddingHorizontal: 5,
-                      borderWidth: 0,
-                    },
-                    errors.dateOfBirth && { borderColor: "red" },
-                  ]}
-                  placeholder="Chọn ngày sinh"
-                  value={value}
-                  editable={false}
-                />
-                <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-                  <Icon
-                    name="calendar"
-                    size={20}
-                    color="black"
-                    style={{ marginRight: 15 }}
-                  />
-                </TouchableOpacity>
-              </View>
-            )}
-          />
-          {errors.dateOfBirth && (
-            <Text style={styles.errorText}>{errors.dateOfBirth.message}</Text>
-          )}
+                    }}
+                  >
+                    <Text
+                      style={[
+                        { flex: 1, height: "100%", textAlignVertical: 'center' },
+                        errors.dateOfBirth && { borderColor: "red" },
+                      ]}
+                    >
+                      {value || "Chọn ngày sinh"}
+                    </Text>
 
-          {showDatePicker && (
-            <DateTimePicker
-              value={selectedDate}
-              mode="date"
-              display="default"
-              onChange={onDateChange}
+                    <Icon
+                      name="calendar"
+                      size={20}
+                      color="black"
+                      style={styles.calendarIcon}
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
             />
-          )}
+
+
+            {errors.dateOfBirth && (
+              <Text style={styles.errorText}>{errors.dateOfBirth.message}</Text>
+            )}
+
+
+            {showDatePicker && (
+              <DateTimePicker
+                value={selectedDate}
+                mode="date"
+                display="default"
+                onChange={onDateChange}
+              />
+            )}
+
+
+
 
           <Text style={styles.label}>Số điện thoại</Text>
           <Controller
@@ -207,7 +214,7 @@ const UpdateProfileModal = ({ visible, onClose, avatarUrl }) => {
             defaultValue={profile?.phone || ""}
             render={({ field: { value } }) => (
               <View style={[styles.inputContainer]}>
-                <Text style={{ flex: 1, paddingHorizontal: 10, lineHeight: 50 }}>
+                <Text style={{ flex: 1, paddingHorizontal: 5, lineHeight: 50 }}>
                   {value}
                 </Text>
               </View>
@@ -269,7 +276,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 5,
-    paddingLeft: 10,
+    paddingLeft: 5,
   },
   inputContainer: {
     width: "100%",
@@ -279,11 +286,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     flexDirection: "row",
     alignItems: "center",
-    paddingLeft: 10,
+    paddingRight: 5
   },
   picker: {
     height: 50,
     width: "100%",
+    // backgroundColor: 'black', 
   },
   inputError: {
     borderColor: "red",

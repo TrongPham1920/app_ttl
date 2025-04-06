@@ -115,11 +115,7 @@ const usePaymentModal = ({ params }) => {
   };
 
   const handleCancel = () => {
-    const id = hotelId;
-    router.push({
-      pathname: "/detail",
-      params: { id: id, resetDates: "true" },
-    });
+    router.back()
   };
 
   const downloadImageToGallery = async (url, fileName) => {

@@ -113,19 +113,19 @@ const Profile = () => {
                 styles.unverifiedText,
                 {
                   textAlign: "center",
-                  color: profile.verified ? "green" : "red",
+                  color: profile.isVerified ? "green" : "red",
                 },
               ]}
             >
-              {profile.verified ? "Đã bảo mật" : "Tài khoản chưa xác thực"}
+              {profile.isVerified ? "Đã bảo mật" : "Tài khoản chưa xác thực"}
             </Text>
             <TouchableOpacity
               style={[
                 styles.authButton,
-                { backgroundColor: profile.verified ? "#007BFF" : "#DC3545" },
+                { backgroundColor: profile.isVerified ? "#007BFF" : "#DC3545" },
               ]}
               onPress={async () => {
-                if (profile.verified) {
+                if (profile.isVerified) {
                   setShowChangePasswordModal(true);
                 } else {
                   await handleClickResend(profile.email);
@@ -134,7 +134,7 @@ const Profile = () => {
               }}
             >
               <Text style={styles.authButtonText}>
-                {profile.verified ? "Đổi mật khẩu" : "Xác thực ngay"}
+                {profile.isVerified ? "Đổi mật khẩu" : "Xác thực ngay"}
               </Text>
             </TouchableOpacity>
           </View>
