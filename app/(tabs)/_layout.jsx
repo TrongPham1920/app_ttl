@@ -1,4 +1,4 @@
-import { Tabs, usePathname } from "expo-router";
+import { Tabs } from "expo-router";
 import {
   AntDesign,
   FontAwesome,
@@ -8,12 +8,6 @@ import {
 import Header from "../../components/ui/layout/Header";
 
 export default function Layout() {
-  const pathname = usePathname();
-
-  // Danh sách các trang không hiển thị tab bar
-  const hideTabBarRoutes = ["/(tabs)/orderdetail", "/(tabs)/payment"];
-  const shouldShowTabBar = !hideTabBarRoutes.includes(pathname);
-
   return (
     <Tabs
       screenOptions={{
@@ -25,9 +19,6 @@ export default function Layout() {
           shadowOpacity: 0,
         },
         headerTransparent: false,
-        tabBarStyle: {
-          display: shouldShowTabBar ? "flex" : "none",
-        },
       }}
     >
       <Tabs.Screen

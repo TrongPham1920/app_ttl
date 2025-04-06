@@ -44,7 +44,6 @@ const useProfile = () => {
       const file = await convertImageToFile(imageFile);
       try {
         const response = await addIMG(file);
-        console.log("Response from addIMG:", response);
         if (response.url) {
           setAvatarUrl(response.url); 
         }
@@ -182,7 +181,6 @@ const useProfile = () => {
   };
   const handleUpdateProfile = async (values) => {
     values.gender = parseInt(values.gender, 10);
-    console.log("va",values)
     try {
       const response = await updateuser(values);
       console.log("res",response)

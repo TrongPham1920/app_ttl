@@ -26,7 +26,6 @@ const FindModal = () => {
   const params = useLocalSearchParams();
 
   const fetchData = async (filterParams, reset) => {
-    console.log("fil", filterParams)
     try {
       setLoading(true);
       const response = await accommodationuser(filterParams);

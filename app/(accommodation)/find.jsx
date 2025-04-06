@@ -47,13 +47,6 @@ const FindScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.filterButtonContent}>
-        <Text style={styles.filterButtonText}>Kết quả</Text>
-        <TouchableOpacity style={styles.filterButton} onPress={toggleModal}>
-          <FontAwesome5 name="sliders-h" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
-
       <View style={styles.tagContainer}>
         {selectedFilters.map((filter, index) => (
           <View key={index} style={styles.tag}>
@@ -64,6 +57,15 @@ const FindScreen = () => {
           </View>
         ))}
       </View>
+
+      <View style={styles.filterButtonContent}>
+        <Text style={styles.filterButtonText}>Kết quả</Text>
+        <TouchableOpacity style={styles.filterButton} onPress={toggleModal}>
+          <FontAwesome5 name="sliders-h" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
+
+      
 
       <CustomList
         loading={loading}
@@ -139,12 +141,11 @@ const styles = StyleSheet.create({
   },
   tag: {
     flexDirection: "row",
-    backgroundColor: "#007BFF",
-    borderRadius: 15,
+    backgroundColor: "#ccc",
+    borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 5,
     marginRight: 5,
-    marginBottom: 5,
     alignItems: "center",
   },
   tagText: {

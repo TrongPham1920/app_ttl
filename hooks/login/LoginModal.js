@@ -15,7 +15,6 @@ export const useLogin = () => {
     try {
       const response = await login({ Identifier, password });
       reset();
-
       if (response.code === 1) {
         onLogin(response?.data);
         Toast.show({
