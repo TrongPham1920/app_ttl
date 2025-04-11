@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 const api = axios.create({
-  baseURL: "https://backend.trothalo.click",
+  baseURL: "https://be.trothalo.click",
   timeout: 30000,
   withCredentials: true,
 });

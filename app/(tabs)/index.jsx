@@ -127,22 +127,22 @@ const HomeScreen = () => {
             {
               province: "Hồ Chí Minh",
               image:
-                "https://wallpapers.com/images/featured/ho-chi-minh-city-souznxe6xnmwb70j.jpg",
+                "https://res.cloudinary.com/dqipg0or3/image/upload/v1744214928/avatars/nduvvvtxkxzrflfoxh8l.jpg",
             },
             {
               province: "Đà Nẵng",
               image:
-                "https://res.cloudinary.com/dqipg0or3/image/upload/v1736306105/avatars/fn38tjh8gqoyksfivpa2.jpg",
+                "https://res.cloudinary.com/dqipg0or3/image/upload/v1744214960/avatars/bhryezvuaama7wjyuneg.jpg",
             },
             {
               province: "Đà Lạt",
               image:
-                "https://haycafe.vn/wp-content/uploads/2022/01/Hinh-anh-Da-Lat-o-quang-truong.jpg",
+                "https://res.cloudinary.com/dqipg0or3/image/upload/v1744214997/avatars/qkopf1kv41kr80wtmpsr.jpg",
             },
             {
               province: "Vũng Tàu",
               image:
-                "https://c1.wallpaperflare.com/preview/868/808/843/vung-tau-panorama-scenery-the-sea.jpg",
+                "https://res.cloudinary.com/dqipg0or3/image/upload/v1744214746/avatars/suukto9ztq6uuswnnvfn.jpg",
             },
           ].map((item, index) => (
             <TouchableOpacity

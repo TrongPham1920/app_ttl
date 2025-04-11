@@ -28,20 +28,24 @@ const SearchScreen = () => {
   });
 
   const onOk = () => {
-    const formattedFromDate = dayjs(fromDate).format("DD/MM/YYYY");
-    const formattedToDate = dayjs(toDate).format("DD/MM/YYYY");
-
+    const rawParams = {
+      province,
+      people,
+      numBed,
+      fromDate: fromDate ? dayjs(fromDate).format("DD/MM/YYYY") : null,
+      toDate: toDate ? dayjs(toDate).format("DD/MM/YYYY") : null,
+    };
+  
+    const params = Object.fromEntries(
+      Object.entries(rawParams).filter(([_, v]) => v)
+    );
+  
     router.push({
       pathname: "/find",
-      params: {
-        people,
-        numBed,
-        fromDate: formattedFromDate,
-        toDate: formattedToDate,
-        province,
-      },
+      params,
     });
   };
+  
 
   return (
     <LinearGradient colors={["#3B5284", "#5BA8A0"]} style={styles.container}>
