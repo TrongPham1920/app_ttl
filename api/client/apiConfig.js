@@ -11,7 +11,7 @@ export const API_PATH = {
     LOGOUT: getPath("auth/logout"),
     VERIFY_EMAIL: getPath("verify-email"),
     DETAIL_ACCOMMODATION: getPath("accommodation/:id"),
-    ACCOMODATIONUSER: getPath("accommodationUser"),
+    ACCOMODATIONUSER: getPath("elastic"),
     BENEFIT: getPath("benefit"),
     ORDER: getPath("orderHistory"),
     ORDERDETAIL: getPath("order/:id"),
@@ -24,7 +24,7 @@ export const API_PATH = {
   };
   
   function getPath(path) {
-    return `https://backend.trothalo.click/api/v1/${path}`;
+    return `https://be.trothalo.click/api/v1/${path}`;
   }
   
   export default API_PATH;

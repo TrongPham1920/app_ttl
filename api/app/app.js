@@ -35,6 +35,7 @@ export const updateuser = async (props) => {
 };
 
 export const accommodationuser = async (props) => {
+  console.log("Params truyền vào:", props);
   if (props.benefitId && Array.isArray(props.benefitId)) {
     props.benefitId = `[${props.benefitId.join(",")}]`;
   }
