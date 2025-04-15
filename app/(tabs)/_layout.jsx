@@ -72,6 +72,17 @@ export default function Layout() {
         }}
       />
 
+      <Tabs.Screen
+        name="chatbot"
+        options={{
+          title: "ChatBot",
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="chatbubble-ellipses-outline" size={size} color={color} />
+          ),
+        }}
+      />
+
       <Tabs.Screen name="orderdetail" options={{ href: null }} />
     </Tabs>
   );
