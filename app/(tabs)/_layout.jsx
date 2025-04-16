@@ -62,6 +62,7 @@ export default function Layout() {
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="hotel" size={size} color={color} />
           ),
+          href: isAuthenticated() ? undefined : null,
         }}
       />
 
