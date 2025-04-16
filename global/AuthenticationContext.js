@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
 
   const connectSocket = () => {
     
-    const wsUrl = "wss://backend.trothalo.click/ws";
+    const wsUrl = "wss://be.trothalo.click/ws";
 
     const ws = new WebSocket(wsUrl);
 

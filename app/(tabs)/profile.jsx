@@ -31,6 +31,7 @@ const Profile = () => {
     handleClickResend,
   } = useProfile();
 
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>

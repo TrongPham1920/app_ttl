@@ -73,7 +73,7 @@ const FindModal = () => {
       const updatedParams = {
         limit: 20,
         page: 0,
-        search: trimmedValue,
+        name: trimmedValue,
         fromDate: fromDate,
         toDate: toDate,
       };
