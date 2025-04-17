@@ -6,8 +6,11 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import Header from "../../components/ui/layout/Header";
+import { useAuth } from "../../global/AuthenticationContext";
 
 export default function Layout() {
+  const {isAuthenticated} = useAuth()
+
   return (
     <Tabs
       screenOptions={{
@@ -59,6 +62,7 @@ export default function Layout() {
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="hotel" size={size} color={color} />
           ),
+          href: isAuthenticated() ? undefined : null,
         }}
       />
 
@@ -69,6 +73,17 @@ export default function Layout() {
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="user" size={size} color={color} />
           ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="chatbot"
+        options={{
+          title: "ChatBot",
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="comments" size={size} color={color} />
+          ),
+          href: isAuthenticated() ? undefined : null,
         }}
       />
 
