@@ -3,19 +3,19 @@ import {
   View,
   Text,
   TextInput,
-  Button,
+  TouchableOpacity,
   FlatList,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
   Image,
-  TouchableOpacity 
 } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../global/AuthenticationContext';
 import { useChatBot } from '../../hooks/chatbot/chatBotModal';
 import FormatUtils from "../../utils/format/Format";
+import Icon from 'react-native-vector-icons/MaterialIcons'; 
 
 const ChatbotScreen = () => {
   const router = useRouter();
@@ -30,8 +30,8 @@ const ChatbotScreen = () => {
           style={[styles.hotelCard, { marginBottom: index === hotels.length - 1 ? 0 : 10 }]}
           onPress={() => router.push({
             pathname: "/detail",
-            params: {id: hotel.id}
-          })} 
+            params: { id: hotel.id }
+          })}
         >
           <Text style={styles.hotelTitle}>{hotel.name}</Text>
           <Image source={{ uri: hotel.avatar }} style={styles.hotelImage} />
@@ -77,7 +77,7 @@ const ChatbotScreen = () => {
           <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
             <View style={{ flex: 9 }}>
               <View style={[styles.message, styles.userMessage]}>
-                <Text style={{color:'#fff', fontSize: 16, flexWrap: 'wrap'}}>{item.text}</Text>
+                <Text style={{ color: '#fff', fontSize: 16, flexWrap: 'wrap' }}>{item.text}</Text>
               </View>
             </View>
             <View style={{ flex: 1, alignItems: 'center' }}>
@@ -113,7 +113,9 @@ const ChatbotScreen = () => {
             value={inputMessage}
             onChangeText={setInputMessage}
           />
-          <Button title="Gửi" onPress={onSend} />
+          <TouchableOpacity style={styles.sendButton} onPress={onSend}>
+            <Icon name="send" size={20} color="#fff" />
+          </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -134,7 +136,7 @@ const styles = StyleSheet.create({
     maxWidth: '100%',
   },
   botMessage: {
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#f2f2f2',
     alignSelf: 'flex-start',
   },
   userMessage: {
@@ -165,9 +167,17 @@ const styles = StyleSheet.create({
     height: 50,
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 25,
+    borderRadius: 15,
     paddingHorizontal: 15,
     marginRight: 10,
+  },
+  sendButton: {
+    width: 60,
+    backgroundColor: '#2196f3',
+    borderRadius: 15,
+    padding: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   senderName: {
     fontSize: 12,
