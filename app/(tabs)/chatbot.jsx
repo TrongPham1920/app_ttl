@@ -3,7 +3,7 @@ import {
   View,
   Text,
   TextInput,
-  Button,
+  TouchableOpacity,
   FlatList,
   KeyboardAvoidingView,
   Platform,
@@ -11,60 +11,96 @@ import {
   Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native';
+import { useRouter } from 'expo-router';
 import { useAuth } from '../../global/AuthenticationContext';
 import { useChatBot } from '../../hooks/chatbot/chatBotModal';
+import FormatUtils from "../../utils/format/Format";
+import Icon from 'react-native-vector-icons/MaterialIcons'; 
 
 const ChatbotScreen = () => {
+  const router = useRouter();
   const { profile } = useAuth();
   const { messages, inputMessage, setInputMessage, onSend } = useChatBot();
+
+  const renderBotHotelList = (hotels) => (
+    <View>
+      {hotels.map((hotel, index) => (
+        <TouchableOpacity
+          key={index}
+          style={[styles.hotelCard, { marginBottom: index === hotels.length - 1 ? 0 : 10 }]}
+          onPress={() => router.push({
+            pathname: "/detail",
+            params: { id: hotel.id }
+          })}
+        >
+          <Text style={styles.hotelTitle}>{hotel.name}</Text>
+          <Image source={{ uri: hotel.avatar }} style={styles.hotelImage} />
+          <Text style={styles.hotelAddress}>Địa chỉ: {hotel.address}</Text>
+          <Text style={styles.hotelPrice}>Giá: {FormatUtils.vndPrice(hotel.price)}</Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
+
+  const renderItem = ({ item }) => {
+    if (item.sender === 'bot') {
+      return (
+        <View style={styles.messageRow}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-end', width: '100%' }}>
+            <View style={{ flex: 1, alignItems: 'center' }}>
+              <Image
+                source={{
+                  uri: 'https://res.cloudinary.com/dqipg0or3/image/upload/v1740564293/avatars/oil5t4os8o5x6dmmwusw.png',
+                }}
+                style={styles.avatar}
+              />
+            </View>
+            <View style={{ flex: 9 }}>
+              <Text style={[styles.senderName, { textAlign: 'left' }]}>TROTHALO</Text>
+              {Array.isArray(item.data) ? (
+                renderBotHotelList(item.data)
+              ) : (
+                <View style={[styles.message, styles.botMessage]}>
+                  <Text style={styles.messageText}>{item.text}</Text>
+                </View>
+              )}
+            </View>
+          </View>
+        </View>
+      );
+    }
+
+    if (item.sender === 'user') {
+      return (
+        <View style={styles.messageRow}>
+          <Text style={[styles.senderName, { textAlign: 'right' }]}>{profile?.name || 'Bạn'}</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+            <View style={{ flex: 9 }}>
+              <View style={[styles.message, styles.userMessage]}>
+                <Text style={{ color: '#fff', fontSize: 16, flexWrap: 'wrap' }}>{item.text}</Text>
+              </View>
+            </View>
+            <View style={{ flex: 1, alignItems: 'center' }}>
+              <Image source={{ uri: profile.avatar }} style={styles.avatar} />
+            </View>
+          </View>
+        </View>
+      );
+    }
+
+    return null;
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined} 
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.container}
         keyboardVerticalOffset={Platform.OS === 'android' ? 80 : 0}
       >
         <FlatList
           data={messages}
-          renderItem={({ item }) => (
-            <View style={styles.messageRow}>
-              {item.sender === 'bot' && (
-                <View style={{ flexDirection: 'row', alignItems: 'flex-end', width: '100%' }}>
-                  <View style={{ flex: 1, alignItems: 'center' }}>
-                    <Image
-                      source={{
-                        uri: 'https://res.cloudinary.com/dqipg0or3/image/upload/v1740564293/avatars/oil5t4os8o5x6dmmwusw.png',
-                      }}
-                      style={styles.avatar}
-                    />
-                  </View>
-                  <View style={{ flex: 9 }}>
-                    <Text style={[styles.senderName, { textAlign: 'left' }]}>TROTHALO</Text>
-                    <View style={[styles.message, styles.botMessage]}>
-                      <Text style={styles.messageText}>{item.text}</Text>
-                    </View>
-                  </View>
-                </View>
-              )}
-
-              {item.sender === 'user' && (
-                <View style={{ width: '100%' }}>
-                  <Text style={[styles.senderName, { textAlign: 'right' }]}>{profile?.name || 'Bạn'}</Text>
-                  <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                    <View style={{ flex: 9 }}>
-                      <View style={[styles.message, styles.userMessage]}>
-                        <Text style={styles.messageText}>{item.text}</Text>
-                      </View>
-                    </View>
-                    <View style={{ flex: 1, alignItems: 'center' }}>
-                      <Image source={{ uri: profile.avatar }} style={styles.avatar} />
-                    </View>
-                  </View>
-                </View>
-              )}
-            </View>
-          )}
+          renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           inverted
           contentContainerStyle={{ padding: 10 }}
@@ -77,7 +113,9 @@ const ChatbotScreen = () => {
             value={inputMessage}
             onChangeText={setInputMessage}
           />
-          <Button title="Gửi" onPress={onSend} />
+          <TouchableOpacity style={styles.sendButton} onPress={onSend}>
+            <Icon name="send" size={20} color="#fff" />
+          </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -98,11 +136,11 @@ const styles = StyleSheet.create({
     maxWidth: '100%',
   },
   botMessage: {
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#f2f2f2',
     alignSelf: 'flex-start',
   },
   userMessage: {
-    backgroundColor: '#4caf50',
+    backgroundColor: '#2196f3',
     alignSelf: 'flex-end',
   },
   messageText: {
@@ -129,15 +167,49 @@ const styles = StyleSheet.create({
     height: 50,
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 25,
+    borderRadius: 15,
     paddingHorizontal: 15,
     marginRight: 10,
+  },
+  sendButton: {
+    width: 60,
+    backgroundColor: '#2196f3',
+    borderRadius: 15,
+    padding: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   senderName: {
     fontSize: 12,
     color: '#666',
     marginBottom: 2,
     width: '90%',
+  },
+  hotelCard: {
+    backgroundColor: '#f1f1f1',
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 8,
+  },
+  hotelTitle: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 4,
+  },
+  hotelAddress: {
+    fontSize: 14,
+    color: '#555',
+  },
+  hotelPrice: {
+    fontSize: 14,
+    color: 'red',
+    marginBottom: 4,
+  },
+  hotelImage: {
+    width: '100%',
+    height: 150,
+    borderRadius: 8,
+    marginVertical: 8,
   },
 });
 

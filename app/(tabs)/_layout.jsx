@@ -87,7 +87,7 @@ export default function Layout() {
         }}
       />
 
-      <Tabs.Screen name="orderdetail" options={{ href: null }} />
+      <Tabs.Screen name="orderdetail" options={{href: null}}/>
     </Tabs>
   );
 }

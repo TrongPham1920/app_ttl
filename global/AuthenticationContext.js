@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
-import { logout, sabank } from "../api/app/app"; 
+import { logout, sabank } from "../api/app/app";
 
 export const AuthContext = createContext();
 
@@ -30,17 +30,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const connectSocket = () => {
-    
-    const wsUrl = "wss://be.trothalo.click/ws";
-
+  const initializeWebSocket = (userID) => {
+    const wsUrl = `wss://be.trothalo.click/ws?userID=${userID}`;
     const ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
       console.log("WebSocket connected");
-      if (profile) {
-        ws.send(JSON.stringify({ type: "connection", user: profile?.user_info }));
-      }
+      ws.send(JSON.stringify({ type: "connection", user: profile?.user_info }));
     };
 
     ws.onmessage = (event) => {
@@ -88,8 +84,6 @@ export const AuthProvider = ({ children }) => {
 
     setProfile(data?.user_info);
     router.push("/");
-
-    connectSocket();
   };
 
   const updateProfile = async (newProfileData) => {
@@ -107,7 +101,8 @@ export const AuthProvider = ({ children }) => {
       try {
         const profileData = await SecureStore.getItemAsync("profile");
         if (profileData) {
-          setProfile(JSON.parse(profileData));
+          const parsedProfile = JSON.parse(profileData);
+          setProfile(parsedProfile);
         }
         await fetchBanks();
       } catch (error) {
@@ -123,6 +118,15 @@ export const AuthProvider = ({ children }) => {
       disconnectSocket();
     };
   }, []);
+
+  useEffect(() => {
+    if (profile?.id || profile?.user_info?.id) {
+      const userID = profile?.user_info?.id || profile?.id;
+      initializeWebSocket(userID);
+    } else {
+      disconnectSocket();
+    }
+  }, [profile]);
 
   const isAuthenticated = () => !!profile;
 

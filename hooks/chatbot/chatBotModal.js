@@ -1,32 +1,57 @@
 import { useState } from 'react';
+import { useAuth } from '../../global/AuthenticationContext';
+import { useChatWebSocket } from '../../components/ui/chatbot/useWebSocket';
+
+let messageId = 0;
 
 export const useChatBot = () => {
-  const [messages, setMessages] = useState([]);
+  const { profile } = useAuth();
+  const [messages, setMessages] = useState([
+    {
+      id: messageId++,
+      text: '👋 Chào bạn, bạn cần Trothalo hỗ trợ gì nào?',
+      sender: 'bot',
+      data: null,
+    },
+  ]);
   const [inputMessage, setInputMessage] = useState('');
 
-  const createUserMessage = (text) => ({
-    id: Math.round(Math.random() * 1000000),
-    text,
-    sender: 'user',
-  });
-
-  const createBotResponse = () => ({
-    id: Math.round(Math.random() * 1000000),
-    text: 'Chào bạn! Tôi là TROTHALO, trợ lý ảo của bạn. Tôi có thể giúp bạn đặt phòng khách sạn, tìm kiếm những địa điểm thú vị gần bạn, hoặc hỗ trợ bạn với bất kỳ câu hỏi nào về dịch vụ. Ví dụ: "Tôi muốn đặt phòng khách sạn ở Đà Lạt vào cuối tuần này" hoặc "Cho tôi xem các villa có hồ bơi ở Nha Trang". Bạn chỉ cần nhắn tin, tôi sẽ cố gắng hỗ trợ hết mức có thể nhé!',
-    sender: 'bot',
+  const { sendMessage } = useChatWebSocket({
+    userId: profile?.id,
+    onMessage: (data) => {
+      if (Array.isArray(data)) {
+        const rawMsg = {
+          id: messageId++,
+          sender: 'bot',
+          data: data,  
+          text: null,  
+        };
+        setMessages((prev) => [rawMsg, ...prev]);
+      } else {
+        const botMsg = {
+          id: messageId++,
+          text: data.message || data,
+          sender: 'bot',
+          data: null,
+        };
+        setMessages((prev) => [botMsg, ...prev]);
+      }
+    },
   });
 
   const onSend = () => {
     if (!inputMessage.trim()) return;
 
-    const newMessage = createUserMessage(inputMessage);
-    setMessages((prevMessages) => [newMessage, ...prevMessages]);
-    setInputMessage('');
+    const userMsg = {
+      id: messageId++,
+      text: inputMessage,
+      sender: 'user',
+      data: null,
+    };
+    setMessages((prev) => [userMsg, ...prev]);
 
-    const botResponse = createBotResponse();
-    setTimeout(() => {
-      setMessages((prevMessages) => [botResponse, ...prevMessages]);
-    }, 1000);
+    sendMessage({ message: inputMessage });
+    setInputMessage('');
   };
 
   return {
