@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -22,6 +22,13 @@ const ChatbotScreen = () => {
   const { profile } = useAuth();
   const { messages, inputMessage, setInputMessage, onSend } = useChatBot();
 
+  useEffect(() => {
+    if (!profile) {
+      router.push('/');  
+    }
+  }, [profile, router]);
+  
+
   const renderBotHotelList = (hotels) => (
     <View>
       {hotels.map((hotel, index) => (
@@ -35,7 +42,6 @@ const ChatbotScreen = () => {
         >
           <Text style={styles.hotelTitle}>{hotel.name}</Text>
           <Image source={{ uri: hotel.avatar }} style={styles.hotelImage} />
-          <Text style={styles.hotelAddress}>Địa chỉ: {hotel.address}</Text>
           <Text style={styles.hotelPrice}>Giá: {FormatUtils.vndPrice(hotel.price)}</Text>
         </TouchableOpacity>
       ))}
@@ -81,7 +87,7 @@ const ChatbotScreen = () => {
               </View>
             </View>
             <View style={{ flex: 1, alignItems: 'center' }}>
-              <Image source={{ uri: profile.avatar }} style={styles.avatar} />
+              <Image source={{ uri: profile?.avatar }} style={styles.avatar} />
             </View>
           </View>
         </View>
@@ -102,7 +108,6 @@ const ChatbotScreen = () => {
           data={messages}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
-          inverted
           contentContainerStyle={{ padding: 10 }}
         />
 

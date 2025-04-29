@@ -17,13 +17,14 @@ export const useChatWebSocket = ({ userId, onMessage }) => {
     };
 
     socket.onmessage = (event) => {
+      const message = event.data;
+    
       try {
-        const data = JSON.parse(event.data);
-        console.log("📩 New message received:", data);
-        onMessage?.(data);
+        const parsed = JSON.parse(message);
+        onMessage(parsed);
       } catch (err) {
-        console.warn("⚠️ Message parse error:", event.data);
-        onMessage?.(event.data);
+        console.warn("⚠️ Message không phải JSON:", message);
+        onMessage(message); 
       }
     };
 
