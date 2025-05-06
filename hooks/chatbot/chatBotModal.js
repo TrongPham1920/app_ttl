@@ -1,56 +1,107 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../../global/AuthenticationContext';
 import { useChatWebSocket } from '../../components/ui/chatbot/useWebSocket';
 
-let messageId = 0;
+const fetchChatHistory = async (userId, page = 1, limit = 20) => {
+  try {
+    const res = await fetch(`https://be.trothalo.click/api/v1/chat_history/${userId}?page=${page}&limit=${limit}`);
+    const data = await res.json();
+
+    const parsedMessages = data.data.map((msg) => {
+      if (msg.message_type === 'json') {
+        let parsedData = [];
+        try {
+          parsedData = JSON.parse(msg.content);
+        } catch (e) {
+          console.error('JSON parsing error:', e);
+        }
+
+        return {
+          id: msg.id,
+          sender: msg.sender,
+          text: null,
+          data: parsedData,
+          timestamp: new Date(msg.created_at),
+        };
+      }
+
+      return {
+        id: msg.id,
+        sender: msg.sender,
+        text: msg.content,
+        data: null,
+        timestamp: new Date(msg.created_at),
+      };
+    });
+
+    return parsedMessages;
+  } catch (error) {
+    console.error('Failed to fetch chat history:', error);
+    return [];
+  }
+};
 
 export const useChatBot = () => {
   const { profile } = useAuth();
-  const [messages, setMessages] = useState([
-    {
-      id: messageId++,
-      text: '👋 Chào bạn, bạn cần Trothalo hỗ trợ gì nào?',
-      sender: 'bot',
-      data: null,
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
 
   const { sendMessage } = useChatWebSocket({
     userId: profile?.id,
     onMessage: (data) => {
-      if (Array.isArray(data)) {
-        const rawMsg = {
-          id: messageId++,
-          sender: 'bot',
-          data: data,  
-          text: null,  
-        };
-        setMessages((prev) => [rawMsg, ...prev]);
-      } else {
-        const botMsg = {
-          id: messageId++,
-          text: data.message || data,
-          sender: 'bot',
-          data: null,
-        };
-        setMessages((prev) => [botMsg, ...prev]);
-      }
+      const newMsg = Array.isArray(data)
+        ? {
+            id: Date.now(),
+            sender: 'bot',
+            text: null,
+            data: data,
+            timestamp: new Date(),
+          }
+        : {
+            id: Date.now(),
+            sender: 'bot',
+            text: data.message || data,
+            data: null,
+            timestamp: new Date(),
+          };
+
+      setMessages((prev) => [...prev, newMsg]);
     },
   });
+
+  useEffect(() => {
+    const loadHistory = async () => {
+      if (!profile?.id) return;
+
+      const history = await fetchChatHistory(profile.id);
+      setMessages([
+        ...history,
+        {
+          id: 'welcome',
+          text: '👋 Chào bạn, mình là Trothalo - trợ lý tìm phòng của bạn!\n\n🛏️ Hãy cho mình biết bạn cần tìm phòng:\n• Bao nhiêu người?\n• Ở khu vực nào?\n• Tầm giá khoảng bao nhiêu?\n\n📞 Nếu bạn muốn tìm thông tin liên hệ, hãy nhập "Liên hệ" nhé!',
+          sender: 'bot',
+          data: null,
+          timestamp: new Date(),
+        },
+      ]);
+    };
+
+    loadHistory();
+  }, [profile?.id]);
 
   const onSend = () => {
     if (!inputMessage.trim()) return;
 
     const userMsg = {
-      id: messageId++,
+      id: Date.now(),
+      type: 'text',
       text: inputMessage,
       sender: 'user',
-      data: null,
+      timestamp: new Date().toISOString(),
     };
-    setMessages((prev) => [userMsg, ...prev]);
 
-    sendMessage({ message: inputMessage });
+    setMessages((prev) => [...prev, userMsg]);
+    sendMessage(JSON.stringify(userMsg));
     setInputMessage('');
   };
 
