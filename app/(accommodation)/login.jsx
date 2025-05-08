@@ -9,12 +9,17 @@ import {
   ImageBackground,
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
-import { useLogin } from "../../hooks/login/LoginModal"; 
+import { useLogin } from "../../hooks/login/LoginModal";
 import { useRouter } from "expo-router";
 
 const LoginScreen = () => {
-  const { control, handleSubmit, reset, formState: { errors } } = useForm();
-  const { isLoading, handleLogin } = useLogin(); 
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const { isLoading, handleLogin } = useLogin();
   const router = useRouter();
 
   return (
@@ -69,17 +74,20 @@ const LoginScreen = () => {
 
         <Button
           title={isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
-          onPress={handleSubmit((data) => handleLogin(data, reset))}  
+          onPress={handleSubmit((data) => handleLogin(data, reset))}
           disabled={isLoading}
         />
 
         <View style={styles.registerContainer}>
           <Text style={styles.registerText}>Bạn chưa có tài khoản? </Text>
-          <TouchableOpacity onPress={() => router.replace("/(auth)/register")}>
+          <TouchableOpacity onPress={() => router.replace("/register")}>
             <Text style={styles.registerLink}>Đăng ký ngay</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => router.replace("/")} style={styles.backToHome}>
+        <TouchableOpacity
+          onPress={() => router.replace("/")}
+          style={styles.backToHome}
+        >
           <Text style={styles.backToHomeText}>Quay về Trang Chủ</Text>
         </TouchableOpacity>
       </View>

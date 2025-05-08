@@ -65,8 +65,6 @@ const FindScreen = () => {
         </TouchableOpacity>
       </View>
 
-      
-
       <CustomList
         loading={loading}
         data={accommodationData}

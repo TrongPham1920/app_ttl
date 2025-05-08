@@ -19,7 +19,7 @@ const RegisterScreen = () => {
     reset,
     formState: { errors },
   } = useForm();
-  
+
   const { onRegister, isLoading } = useRegister(reset);
   const router = useRouter();
 
@@ -128,13 +128,16 @@ const RegisterScreen = () => {
 
         <View style={styles.loginContainer}>
           <Text style={styles.loginText}>Bạn đã có tài khoản? </Text>
-          <TouchableOpacity onPress={() => router.push("/(auth)/login")}>
+          <TouchableOpacity onPress={() => router.push("/login")}>
             <Text style={styles.loginLink}>Đăng nhập ngay</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => router.replace("/")} style={styles.backToHome}>
-            <Text style={styles.backToHomeText}>Quay về Trang Chủ</Text>
-          </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => router.replace("/")}
+          style={styles.backToHome}
+        >
+          <Text style={styles.backToHomeText}>Quay về Trang Chủ</Text>
+        </TouchableOpacity>
       </View>
     </ImageBackground>
   );
